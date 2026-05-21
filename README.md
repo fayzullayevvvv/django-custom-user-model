@@ -1,9 +1,6 @@
 # Django Custom User Model — Todos API
 
-## Loyiha haqida
-
-Django REST Framework asosida yozilgan To-do boshqaruv tizimi.
-Foydalanuvchilar ro'yxatdan o'tib, o'z vazifalarini yaratishi, ko'rishi, tahrirlashi va o'chirishi mumkin.
+Django REST Framework asosida yozilgan foydalanuvchi va vazifalar boshqaruv tizimi.
 
 ---
 
@@ -12,43 +9,43 @@ Foydalanuvchilar ro'yxatdan o'tib, o'z vazifalarini yaratishi, ko'rishi, tahrirl
 - Python 3.14
 - Django
 - Django REST Framework
-- SQLite (ma'lumotlar bazasi)
+- SQLite
 - uv (paket menejeri)
 
 ---
 
 ## Loyiha tuzilmasi
 
-| Papka / Fayl   | Vazifasi                              |
-| -------------- | ------------------------------------- |
-| config/        | Loyiha sozlamalari (settings, urls)   |
-| users/         | Foydalanuvchi modeli va ro'yxatdan o'tish |
-| manage.py      | Django boshqaruv skripti              |
-| pyproject.toml | Loyiha bog'liqliklari                 |
+```text
+config/        — sozlamalar (settings, urls)
+users/         — foydalanuvchi modeli va endpointlar
+manage.py      — Django boshqaruv skripti
+pyproject.toml — bog'liqliklar
+```
 
 ---
 
-## Ma'lumotlar modellari
+## Modellar
 
-### User (Foydalanuvchi)
+### User
 
-Django ning standart `AbstractUser` modelidan meros olingan. Qo'shimcha maydon:
+`AbstractUser` dan meros olingan. Qo'shimcha maydon:
 
-| Maydon      | Turi    | Izoh                              |
-| ----------- | ------- | --------------------------------- |
-| is_verified | Boolean | Foydalanuvchi tasdiqlangan yoki yo'q |
+| Maydon      | Turi    | Izoh                          |
+| ----------- | ------- | ----------------------------- |
+| is_verified | Boolean | Foydalanuvchi tasdiqlanganmi  |
 
-### Task (Vazifa)
+### Todo (Vazifa)
 
-| Maydon       | Turi       | Izoh                        |
-| ------------ | ---------- | --------------------------- |
-| id           | Integer    | Avtomatik birlamchi kalit   |
-| title        | String     | Vazifa sarlavhasi           |
-| description  | Text       | Vazifa tavsifi              |
-| is_completed | Boolean    | Bajarilganlik holati        |
-| user         | ForeignKey | Vazifa egasi (User)         |
-| created_at   | DateTime   | Yaratilgan vaqt             |
-| updated_at   | DateTime   | Yangilangan vaqt            |
+| Maydon       | Turi       | Izoh                      |
+| ------------ | ---------- | ------------------------- |
+| id           | Integer    | Birlamchi kalit           |
+| title        | String     | Vazifa sarlavhasi         |
+| description  | Text       | Vazifa tavsifi            |
+| is_completed | Boolean    | Bajarilganlik holati      |
+| user         | ForeignKey | Vazifa egasi              |
+| created_at   | DateTime   | Yaratilgan vaqt           |
+| updated_at   | DateTime   | Yangilangan vaqt          |
 
 ---
 
@@ -56,41 +53,43 @@ Django ning standart `AbstractUser` modelidan meros olingan. Qo'shimcha maydon:
 
 ### Foydalanuvchi
 
-| Metod | URL                      | Vazifasi                              |
-| ----- | ------------------------ | ------------------------------------- |
-| POST  | /api/v1/users/register/  | Yangi foydalanuvchi ro'yxatdan o'tkazish |
+| Metod | URL                     | Vazifasi                    |
+| ----- | ----------------------- | --------------------------- |
+| POST  | /api/users/register/    | Yangi foydalanuvchi yaratish |
 
-### Vazifalar (Todos)
+### Vazifalar
 
-| Metod  | URL                  | Vazifasi                                    |
-| ------ | -------------------- | ------------------------------------------- |
-| POST   | /api/v1/todos/       | Yangi vazifa yaratish                       |
-| GET    | /api/v1/todos/       | Barcha vazifalarni ko'rish (filter bilan)   |
-| GET    | /api/v1/todos/{id}/  | Bitta vazifani ko'rish                      |
-| PUT    | /api/v1/todos/{id}/  | Vazifani to'liq yangilash                   |
-| DELETE | /api/v1/todos/{id}/  | Vazifani o'chirish                          |
+Foydalanuvchi URL parametridan olinadi (`user_id`).
 
-#### Sana bo'yicha filtrlash
-
-Vazifalar ro'yxatini ko'rishda quyidagi query parametrlardan foydalanish mumkin:
-
-- `start_date` — boshlanish sanasi (format: DD.MM.YYYY)
-- `end_date` — tugash sanasi (format: DD.MM.YYYY)
-
-Misol: `/api/v1/todos/?start_date=12.11.2025&end_date=21.05.2026`
+| Metod  | URL                              | Vazifasi              |
+| ------ | -------------------------------- | --------------------- |
+| GET    | /api/users/{user_id}/todos/      | Barcha vazifalar      |
+| POST   | /api/users/{user_id}/todos/      | Yangi vazifa yaratish |
+| GET    | /api/users/{user_id}/todos/{id}/ | Bitta vazifa          |
+| PUT    | /api/users/{user_id}/todos/{id}/ | Vazifani yangilash    |
+| DELETE | /api/users/{user_id}/todos/{id}/ | Vazifani o'chirish    |
 
 ---
 
-## O'rnatish va ishga tushirish
+## O'rnatish
 
-1. Repozitoriyani klonlash
-2. Virtual muhit yaratish va bog'liqliklarni o'rnatish
-3. Ma'lumotlar bazasini migratsiya qilish
-4. Serverni ishga tushirish
+```bash
+# Reponi klonlash
+git clone <repo-url>
+cd django-custom-user-model
+
+# Virtual muhit va bog'liqliklar
+uv sync
+
+# Migratsiya
+python manage.py migrate
+
+# Serverni ishga tushirish
+python manage.py runserver
+```
 
 ---
 
 ## Loyiha maqsadi
 
-Bu loyiha **NajotTalim SN04** o'quv dasturining 74-darsi uchun yozilgan.
-Maqsad — Django da maxsus foydalanuvchi modeli (Custom User Model) va REST API yaratishni o'rganish.
+**NajotTalim SN04** — 74-dars. Django da Custom User Model va DRF yordamida REST API yaratish.
