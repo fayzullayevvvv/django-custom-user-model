@@ -4,7 +4,6 @@ from .models import User, Todo
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = [
@@ -14,9 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
             "password",
             "is_verified",
         ]
-        extra_kwargs = {
-            "password": {"write_only": True}
-        }
+        extra_kwargs = {"password": {"write_only": True}}
         read_only_fields = ["id"]
 
     def create(self, validated_data):
@@ -25,7 +22,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TodoSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Todo
         fields = [
@@ -49,5 +45,5 @@ class TodoSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Title kamida 3 ta belgidan iborat bo'lishi kerak"
             )
-        
+
         return value
